@@ -1,5 +1,5 @@
 % This script is designed to analyse Pearson's Correlation for 3 time
-% periods. Custom: For Padova dataset, 3M, 6M and 12M, 18 nodes
+% periods. 3M, 6M and 12M, 18 nodes
 clc
 close all 
 clear all
