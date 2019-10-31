@@ -1,5 +1,6 @@
 % This script is designed to analyse Informtation Theory Mutual Information
-% Metric for 3 time periods. 3M, 6M and 12M, 18 nodes
+% Metric for 3 time periods. Custom: For _ dataset, 3M, 6M and 12M, 18
+% nodes
 clc
 close all 
 clear all
