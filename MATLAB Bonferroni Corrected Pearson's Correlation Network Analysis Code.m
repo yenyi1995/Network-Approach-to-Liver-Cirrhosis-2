@@ -1,10 +1,10 @@
-% This script is designed to analyse Bonferroni Corrected Pearson's
-% Correlation for 3 time periods. 3M, 6M and 12M, 18 nodes
+% This script is designed to analyse Pearson's Correlation for 3 time
+% periods. Custom: For Padova dataset, 3M, 6M and 12M, 18 nodes
 clc
 close all 
 clear all
+% Data import 
 tic 
-% Data import
 Surv3M = importdata ('BDS_3MS.csv');
 [R1,P1] = corrcoef(Surv3M,'Rows','pairwise'); 
 NonSurv3M = importdata ('BDS_3MNS.csv');
@@ -27,9 +27,7 @@ P3B = NaN(default);
 P4B = NaN(default);
 P4B = NaN(default);
 P6B = NaN(default);
-BCvalue = default(1,1);
-K = ((BCvalue)*(BCvalue-1))/2;
-p = 0.05/K; % Bonferroni adjusted p-value 
+p = 0.05 % p-value 
 % Removal of non-significant correlations
 for j=1:nn
     for i=1:nn
