@@ -2,34 +2,16 @@ clc
 close all 
 clear all
 tic 
-% Data import
-B = importdata ('BDS_3MS_PMMELD14.csv'); % Survivors
-A = importdata ('BDS_3MNS_PMMELD14.csv'); % Non-survivors, labelled as A because the pair-matched matrix arrays will never be bigger than the smallest dataset
-BB = importdata ('BDS_6MS_PMMELD14.csv'); 
-AA = importdata ('BDS_6MNS_PMMELD14.csv');
-BBB = importdata ('BDS_12MS_PMMELD14.csv'); 
-AAA = importdata ('BDS_12MNS_PMMELD14.csv');
+B = importdata ('BDS_3MS_PMMELDNA14.csv'); % Survivors
+A = importdata ('BDS_3MNS_PMMELDNA14.csv'); % Non-survivors, labelled as A because the pair-matched matrix arrays will never be bigger than the smallest dataset
+BB = importdata ('BDS_6MS_PMMELDNA14.csv'); 
+AA = importdata ('BDS_6MNS_PMMELDNA14.csv');
+BBB = importdata ('BDS_12MS_PMMELDNA14.csv'); 
+AAA = importdata ('BDS_12MNS_PMMELDNA14.csv');
 toc
-% Code for pair matching and generation of pair matched datasets 
 tmpA = size(A);
 C = NaN(tmpA); 
 D = NaN(tmpA);
-% Logic is to assign a pair matching data row for each row of the smallest
-% dataset for an indicated column variable 
-% If there is an exact match, assign these rows to the new outcome pair
-% match matrices as corresponding pair matches 
-% If there is >1 exact match, assign a random picked row to the new outcome
-% pair match matrices as corresponding pair matches 
-% If there is no exact match, expand the pair match criteria range 
-% If there is still no close match, return both rows with NaN as pair match
-% is invalidated and omitted 
-% If there is exactly one close match which fulfills the criteria, assign
-% these rows to the new outcome pair match matrices as corresponding pair
-% matches 
-% If there is >1 close match, assign a random picked row to the new outcome
-% pair match matrices as corresponding pair matches 
-% Delete all NaN matches to reduce matrix to valid size 
-% Apply the analysis index for network map generation 
 for i = 1:size(A,1)
     tmp = B(B(:,6)==A(i,6),:);
      C(i,:) = A(i,:);
@@ -175,7 +157,7 @@ P1BR_closeness = centrality(P1BRgraph,'closeness');
 P1BRgraph.Nodes.closeness = P1BR_closeness;
 P1BR_eigenvector = centrality(P1BRgraph,'eigenvector'); 
 P1BRgraph.Nodes.eigenvector = P1BR_eigenvector;
-P1BRgraph.Nodes;
+output1 = P1BRgraph.Nodes;
 P1BRshortestpaths=distances(P1BRgraph)
 for e=1:nn
    for f=e:(nn-1)
@@ -214,7 +196,7 @@ P2BR_closeness = centrality(P2BRgraph,'closeness');
 P2BRgraph.Nodes.closeness = P2BR_closeness;
 P2BR_eigenvector = centrality(P2BRgraph,'eigenvector'); 
 P2BRgraph.Nodes.eigenvector = P2BR_eigenvector;
-P2BRgraph.Nodes
+output2 = P2BRgraph.Nodes
 P2BRshortestpaths=distances(P2BRgraph) 
 for j=1:nn
    for i=j:(nn-1)
@@ -253,7 +235,7 @@ P3BR_closeness = centrality(P3BRgraph,'closeness');
 P3BRgraph.Nodes.closeness = P3BR_closeness;
 P3BR_eigenvector = centrality(P3BRgraph,'eigenvector');
 P3BRgraph.Nodes.eigenvector = P3BR_eigenvector;
-P3BRgraph.Nodes;
+output3 = P3BRgraph.Nodes;
 P3BRshortestpaths=distances(P3BRgraph)
 for e=1:nn
    for f=e:(nn-1)
@@ -279,11 +261,10 @@ P4BAbsgraph=abs(P4B);
 Weight=P4BAbsgraph;
 node_names = {'HE','PSShunt','Ascites','Diabetes','Pugh','Alb','Tot Bili','PT_pC','Creatinine','INR','Ammonia','Na','Hb','CRP'};
 P4BRgraph = graph(P4BAbsgraph,node_names);
-%LWidths=5*P4BRgraph.Edges.Weight/max(P4BRgraph.Edges.Weight);
+LWidths=5*P4BRgraph.Edges.Weight/max(P4BRgraph.Edges.Weight);
 figure(2)
 subplot (1,2,2)
-plot(P4BRgraph,'Layout','force','UseGravity',true,'NodeColor','red','EdgeColor','black','MarkerSize',4)
-%'LineWidth',LWidths,
+plot(P4BRgraph,'LineWidth',LWidths,'Layout','force','UseGravity',true,'NodeColor','red','EdgeColor','black','MarkerSize',4)
 title ('Non survivor 6M')
 P4BR_degree = centrality(P4BRgraph,'Degree'); 
 P4BRgraph.Nodes.degree = P4BR_degree;
@@ -293,7 +274,7 @@ P4BR_closeness = centrality(P4BRgraph,'closeness');
 P4BRgraph.Nodes.closeness = P4BR_closeness;
 P4BR_eigenvector = centrality(P4BRgraph,'eigenvector');
 P4BRgraph.Nodes.eigenvector = P4BR_eigenvector;
-P4BRgraph.Nodes;
+output4 = P4BRgraph.Nodes;
 P4BRshortestpaths=distances(P4BRgraph)
 for j=1:nn
    for i=j:(nn-1)
@@ -333,7 +314,7 @@ P5BR_closeness = centrality(P5BRgraph,'closeness');
 P5BRgraph.Nodes.closeness = P5BR_closeness;
 P5BR_eigenvector = centrality(P5BRgraph,'eigenvector');
 P5BRgraph.Nodes.eigenvector = P5BR_eigenvector;
-P5BRgraph.Nodes
+output5 = P5BRgraph.Nodes
 P5BRshortestpaths=distances(P5BRgraph)
 for e=1:nn
    for f=e:(nn-1)
@@ -359,11 +340,10 @@ P6BAbsgraph=abs(P6B);
 Weight=P6BAbsgraph;
 node_names = {'HE','PSShunt','Ascites','Diabetes','Pugh','Alb','Tot Bili','PT_pC','Creatinine','INR','Ammonia','Na','Hb','CRP'};
 P6BRgraph = graph(P6BAbsgraph,node_names);
-%LWidths=5*P6BRgraph.Edges.Weight/max(P6BRgraph.Edges.Weight);
+LWidths=5*P6BRgraph.Edges.Weight/max(P6BRgraph.Edges.Weight);
 figure(3)
 subplot (1,2,2)
-plot(P6BRgraph,'Layout','force','UseGravity',true,'NodeColor','red','EdgeColor','black','MarkerSize',4)
-%'LineWidth',LWidths,
+plot(P6BRgraph,'LineWidth',LWidths,'Layout','force','UseGravity',true,'NodeColor','red','EdgeColor','black','MarkerSize',4)
 title ('Non survivor 12M')
 P6BR_degree = centrality(P6BRgraph,'Degree'); 
 P6BRgraph.Nodes.degree = P6BR_degree;
@@ -373,7 +353,7 @@ P6BR_closeness = centrality(P6BRgraph,'closeness');
 P6BRgraph.Nodes.closeness = P6BR_closeness;
 P6BR_eigenvector = centrality(P6BRgraph,'eigenvector');
 P6BRgraph.Nodes.eigenvector = P6BR_eigenvector;
-P6BRgraph.Nodes;
+output6 = P6BRgraph.Nodes;
 P6BRshortestpaths=distances(P6BRgraph)
 
 
